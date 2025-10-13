@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "PerlinProcTerrain.h"
 
 AFirstPerson415RDavisProjectile::AFirstPerson415RDavisProjectile() 
 {
@@ -62,6 +63,8 @@ void AFirstPerson415RDavisProjectile::OnHit(UPrimitiveComponent* HitComp, AActor
 	}
 
 	if (OtherActor != nullptr)
+
+		//creates particle systems for projectile and sets the object to destroy after collision
 	{
 		if (colorP)
 		{
@@ -78,6 +81,13 @@ void AFirstPerson415RDavisProjectile::OnHit(UPrimitiveComponent* HitComp, AActor
 
 		MatInstance->SetVectorParameterValue("Color", randColor);
 		MatInstance->SetScalarParameterValue("Frame", frameNum);
+
+		APerlinProcTerrain* procTerrain = Cast<APerlinProcTerrain>(OtherActor);
+
+		if (procTerrain)
+		{
+			procTerrain->AlterMesh(Hit.ImpactPoint);
+		}
 
 	}
 }
